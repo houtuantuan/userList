@@ -3,21 +3,23 @@ import { UserApiService } from '../user-api.service';
 import { User } from '../models/user-model';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { ActivatedRoute, Router } from '@angular/router';
+import { CommonModule } from '@angular/common';
 
 interface Column {
   key: string;
   label: string;
+  clickable: boolean
 }
 @Component({
   selector: 'app-users',
   standalone: true,
-  imports: [MatTableModule],
+  imports: [MatTableModule,CommonModule],
   templateUrl: './users.component.html',
   styleUrl: './users.component.css',
 })
 export class UsersComponent implements OnInit {
-  displayedColumns: Column[] = [{ key: 'email', label: 'E-Mail' },
-  { key: 'name', label: 'Name' }
+  displayedColumns: Column[] = [{ key: 'email', label: 'E-Mail', clickable: true },
+  { key: 'name', label: 'Name', clickable: false }
 
   ];
   dataSource = new MatTableDataSource<User>;

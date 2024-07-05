@@ -12,5 +12,4 @@ import { UserDetailsComponent } from './user-details/user-details.component';
   styleUrl: './app.component.css'
 })
 export class AppComponent {
-  title = 'user-list';
 }

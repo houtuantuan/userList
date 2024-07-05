@@ -1,2 +1,36 @@
-<h1>d</h1>
-  
+@if (user()) {
+<mat-card class="max-w-600px m-auto w-1/2">
+    <div class="text-white">back to list</div>
+  <mat-card-header class="flex gap-5">
+    <mat-card-title class="text-white"> User Details </mat-card-title
+    ><span class="material-symbols-outlined">
+      <mat-icon
+        color="accent"
+        (click)="openDialog()"
+        class="hover:cursor-pointer"
+        >edit</mat-icon
+      >
+    </span>
+  </mat-card-header>
+  <mat-card-content>
+    <mat-list>
+      <mat-list-item>
+        <h3 matLine>Name: {{ user()!.name }}</h3>
+      </mat-list-item>
+      <mat-list-item>
+        <h3 matLine>Email: {{ user()!.email }}</h3>
+      </mat-list-item>
+      <mat-list-item>
+        <h3 matLine>Phone: {{ user()!.phone }}</h3>
+      </mat-list-item>
+      <mat-list-item>
+        <h3 matLine>
+          Address: {{ user()!.address.street }}, {{ user()!.address.suite }},
+          {{ user()!.address.city }}, {{ user()!.address.zipcode }}
+        </h3>
+      </mat-list-item>
+    </mat-list>
+  </mat-card-content>
+</mat-card>
+
+}
