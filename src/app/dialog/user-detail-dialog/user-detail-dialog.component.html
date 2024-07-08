@@ -1,7 +1,17 @@
 <mat-card class="p-10 h-full bg-gray-800 text-white">
-  <h1 mat-dialog-title class="text-white text-xl font-semibold mb-4">
-    Edit User Details
-  </h1>
+  <div class="flex justify-between">
+    <h1 mat-dialog-title class="text-white text-xl font-semibold mb-4">
+      Edit User Details
+    </h1>
+    <button
+      mat-icon-button
+      class="relative bottom-8 left-8"
+      (click)="onNoClick()"
+    >
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+
   <form [formGroup]="userForm" (ngSubmit)="onSubmit()">
     <div mat-dialog-content class="space-y-4">
       <mat-form-field appearance="fill" class="w-full">

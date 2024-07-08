@@ -14,6 +14,7 @@ import { UserApiService } from '../../user-api.service';
 import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCard } from '@angular/material/card';
+import { MatIcon } from '@angular/material/icon';
 @Component({
   selector: 'app-user-detail-dialog',
   standalone: true,
@@ -21,7 +22,7 @@ import { MatCard } from '@angular/material/card';
     FormsModule,
     MatFormFieldModule,
     MatInputModule,
-    ReactiveFormsModule,MatButtonModule,MatCard
+    ReactiveFormsModule,MatButtonModule,MatCard,MatIcon
   ],
   templateUrl: './user-detail-dialog.component.html',
   styleUrl: './user-detail-dialog.component.css',
