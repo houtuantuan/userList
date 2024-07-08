@@ -1,4 +1,4 @@
-<div class="mat-elevation-z8">
+<div class="mat-elevation-z8 w-5/12 m-auto">
   <table mat-table [dataSource]="users()" class="mat-table m-auto">
     @for(column of displayedColumns; track column.key) {
     <ng-container matColumnDef="{{ column.key }}">
@@ -16,7 +16,7 @@
 
     <!-- Header and Row Declarations -->
 
-    <tr mat-header-row *matHeaderRowDef="displayedColumnKeys"></tr>
+    <tr mat-header-row *matHeaderRowDef="displayedColumnKeys" ></tr>
     <tr mat-row *matRowDef="let row; columns: displayedColumnKeys"></tr>
   </table>
 </div>
