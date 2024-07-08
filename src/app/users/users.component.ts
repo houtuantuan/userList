@@ -1,51 +1,66 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, signal } from '@angular/core';
 import { UserApiService } from '../user-api.service';
-import { User } from '../models/user-model';
-import { MatTableDataSource, MatTableModule } from '@angular/material/table';
-import { ActivatedRoute, Router } from '@angular/router';
+import { MatTableModule } from '@angular/material/table';
+import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 
+/**
+ * Interface representing a column in the table.
+ */
 interface Column {
   key: string;
   label: string;
-  clickable: boolean
+  clickable: boolean;
 }
+
+/**
+ * UsersComponent displays a list of users in a table and allows navigation to user details.
+ */
 @Component({
   selector: 'app-users',
   standalone: true,
-  imports: [MatTableModule,CommonModule],
+  imports: [MatTableModule, CommonModule],
   templateUrl: './users.component.html',
   styleUrl: './users.component.css',
 })
 export class UsersComponent implements OnInit {
-  displayedColumns: Column[] = [{ key: 'email', label: 'E-Mail', clickable: true },
-  { key: 'name', label: 'Name', clickable: false }
+  /**
+   * Signal containing the list of users.
+   */
+  users = this.userService.users;
 
+  /**
+   * Columns to be displayed in the table.
+   */
+  displayedColumns: Column[] = [
+    { key: 'email', label: 'E-Mail', clickable: true },
+    { key: 'name', label: 'Name', clickable: false },
   ];
-  dataSource = new MatTableDataSource<User>;
 
-  constructor(private userService: UserApiService, private router: Router) { }
+  constructor(private userService: UserApiService, private router: Router) {}
 
+  /**
+   * Angular lifecycle hook that is called after component initialization.
+   */
   ngOnInit(): void {
-    this.userService.getUsers().subscribe({
-      next: (data: User[]) => {
-        this.dataSource.data = data;
-        console.log(this.dataSource.data)
-      },
-      error: (error: any) => {
-        console.error('Error fetching users', error);
-      },
-      complete: () => {
-        console.log('User fetching complete');
-      }
-    });
+    if (this.users().length === 0) {
+      this.userService.getUsers();
+    }
+  }
 
-  }
+  /**
+   * Get the keys of the displayed columns.
+   * @returns {string[]} Array of column keys.
+   */
   get displayedColumnKeys(): string[] {
-    return this.displayedColumns.map(column => column.key);
+    return this.displayedColumns.map((column) => column.key);
   }
+
+  /**
+   * Handle user selection and navigate to user details.
+   * @param {number} id - The ID of the selected user.
+   */
   public onUserSelect(id: number): void {
     this.router.navigateByUrl(`/users/${id}`);
   }
 }
-

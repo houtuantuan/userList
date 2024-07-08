@@ -1,68 +1,83 @@
-import { Component, inject, signal } from '@angular/core';
-import { User } from '../models/user-model';
-import { ActivatedRoute } from '@angular/router';
+import { Component, inject, OnInit, signal } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { UserApiService } from '../user-api.service';
 import { MatCardModule } from '@angular/material/card';
 import { MatListModule } from '@angular/material/list';
 import { MatIconModule } from '@angular/material/icon';
-import {
-  MAT_DIALOG_DATA,
-  MatDialog,
-  MatDialogActions,
-  MatDialogClose,
-  MatDialogContent,
-  MatDialogRef,
-  MatDialogTitle,
-} from '@angular/material/dialog';
+import { MatDialog } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { UserDetailDialogComponent } from '../dialog/user-detail-dialog/user-detail-dialog.component';
+import { User } from '../models/user-model';
+import { DEFAULT_USER } from '../utils/constants';
+import { FormsModule } from '@angular/forms';
+
 @Component({
   selector: 'app-user-details',
   standalone: true,
-  imports: [MatCardModule, MatListModule, MatIconModule, MatFormFieldModule, MatInputModule, FormsModule, MatButtonModule],
+  imports: [
+    MatCardModule,
+    MatListModule,
+    MatIconModule,
+    MatFormFieldModule,
+    MatInputModule,
+    FormsModule,
+    MatButtonModule,
+  ],
   templateUrl: './user-details.component.html',
-  styleUrl: './user-details.component.css'
+  styleUrls: ['./user-details.component.css'],
 })
-export class UserDetailsComponent {
-  user = signal<User | null>(null);
-  readonly dialog = inject(MatDialog);
+export class UserDetailsComponent implements OnInit {
+  user: User = DEFAULT_USER;
 
-  constructor(
-    private route: ActivatedRoute,
-    private userService: UserApiService
-  ) { }
+  /**
+   * Instance of MatDialog used to open dialog components.
+   */
+  readonly dialog = inject(MatDialog);
+  route = inject(ActivatedRoute);
+  userService = inject(UserApiService);
+  router = inject(Router);
+
+  constructor() {}
 
   ngOnInit(): void {
     const userId = this.route.snapshot.paramMap.get('id');
-    console.log(`User ID from route: ${userId}`);
     if (userId) {
-      this.userService.getUserById(+userId).subscribe({
-        next: (data: User) => {
-          this.user.set(data);
-          console.log(this.user)
-        },
-        error: (error: any) => {
-          console.error('Error fetching user details', error);
-        }
-      });
+      this.loadUser(+userId);
     }
   }
 
+  /**
+   * Loads the user data based on the user ID.
+   * @param userId - The ID of the user to load.
+   */
+  loadUser(userId: number): void {
+    this.userService.getUserById(userId).subscribe((user) => {
+      this.user = user;
+    });
+  }
+
+  /**
+   * Opens the dialog to edit user details.
+   */
   openDialog(): void {
     const dialogRef = this.dialog.open(UserDetailDialogComponent, {
-      data: this.user(),
-      height:'50vh'
+      data: this.user,
+      height: 'fit-content',
     });
 
-    dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog was closed');
+    dialogRef.afterClosed().subscribe((result) => {
       if (result) {
-        this.user.set(result); // Update the signal with the new user data
-        console.log('The dialog was closed with result:', result);
+        this.user = result; // Update the signal with the new user data
       }
     });
+  }
+
+  /**
+   * Navigates back to the user list.
+   */
+  goBackToList(): void {
+    this.router.navigate(['/']);
   }
 }
