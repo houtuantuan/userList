@@ -1,0 +1,22 @@
+<div class="mat-elevation-z8 w-5/12 m-auto">
+  <table mat-table [dataSource]="users()" class="mat-table m-auto">
+    @for(column of displayedColumns; track column.key) {
+    <ng-container matColumnDef="{{ column.key }}">
+      <th mat-header-cell *matHeaderCellDef>{{ column.label }}</th>
+      <td
+        mat-cell
+        *matCellDef="let user"
+        (click)="column.clickable ? onUserSelect(user.id) : undefined"
+        [ngClass]="{ 'cursor-pointer': column.clickable === true }"
+      >
+        {{ user[column.key] }}
+      </td>
+    </ng-container>
+    }
+
+    <!-- Header and Row Declarations -->
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumnKeys" ></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumnKeys"></tr>
+  </table>
+</div>
