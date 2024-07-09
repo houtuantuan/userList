@@ -14,21 +14,22 @@
 
   <form [formGroup]="userForm" (ngSubmit)="onSubmit()">
     <div mat-dialog-content class="space-y-4">
+      <!-- first row -->
       <mat-form-field appearance="fill" class="w-full">
         <mat-label>Name</mat-label>
         <input matInput formControlName="name" />
       </mat-form-field>
-
+      <!-- second row -->
       <mat-form-field appearance="fill" class="w-full">
         <mat-label>Email</mat-label>
         <input matInput formControlName="email" />
       </mat-form-field>
-
+      <!-- third row -->
       <mat-form-field appearance="fill" class="w-full">
         <mat-label>Phone</mat-label>
         <input matInput formControlName="phone" />
       </mat-form-field>
-
+      <!-- fourth row -->
       <div formGroupName="address" class="space-y-4">
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
           <mat-form-field appearance="fill" class="w-full">
@@ -41,7 +42,7 @@
             <input matInput formControlName="suite" />
           </mat-form-field>
         </div>
-
+        <!-- fifth row -->
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
           <mat-form-field appearance="fill" class="w-full">
             <mat-label>City</mat-label>
@@ -55,7 +56,7 @@
         </div>
       </div>
     </div>
-
+    <!-- save and cancel buttons -->
     <div mat-dialog-actions class="flex justify-between mt-4">
       <button mat-raised-button type="button" (click)="onNoClick()">
         Cancel

@@ -1,4 +1,4 @@
-import { Component, OnInit, signal } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import { UserApiService } from '../user-api.service';
 import { MatTableModule } from '@angular/material/table';
 import { Router } from '@angular/router';
@@ -24,10 +24,12 @@ interface Column {
   styleUrl: './users.component.css',
 })
 export class UsersComponent implements OnInit {
+  private userService = inject(UserApiService);
+  private router = inject(Router);
   /**
    * Signal containing the list of users.
    */
-  users = this.userService.users;
+  public users = this.userService.users;
 
   /**
    * Columns to be displayed in the table.
@@ -37,14 +39,11 @@ export class UsersComponent implements OnInit {
     { key: 'name', label: 'Name', clickable: false },
   ];
 
-  constructor(private userService: UserApiService, private router: Router) {}
+  constructor() {}
 
-  /**
-   * Angular lifecycle hook that is called after component initialization.
-   */
   ngOnInit(): void {
     if (this.users().length === 0) {
-      this.userService.getUsers();
+      this.userService.fetchUsers();
     }
   }
 

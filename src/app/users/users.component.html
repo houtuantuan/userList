@@ -7,7 +7,7 @@
         mat-cell
         *matCellDef="let user"
         (click)="column.clickable ? onUserSelect(user.id) : undefined"
-        [ngClass]="{ 'column-email': column.clickable === true }"
+        [ngClass]="{ 'cursor-pointer': column.clickable === true }"
       >
         {{ user[column.key] }}
       </td>

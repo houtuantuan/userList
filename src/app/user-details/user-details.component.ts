@@ -29,15 +29,11 @@ import { FormsModule } from '@angular/forms';
   styleUrls: ['./user-details.component.css'],
 })
 export class UserDetailsComponent implements OnInit {
-  user: User = DEFAULT_USER;
-
-  /**
-   * Instance of MatDialog used to open dialog components.
-   */
   readonly dialog = inject(MatDialog);
-  route = inject(ActivatedRoute);
-  userService = inject(UserApiService);
-  router = inject(Router);
+  private route = inject(ActivatedRoute);
+  private userService = inject(UserApiService);
+  private router = inject(Router);
+  public user: User = DEFAULT_USER;
 
   constructor() {}
 
@@ -66,10 +62,10 @@ export class UserDetailsComponent implements OnInit {
       data: this.user,
       height: 'fit-content',
     });
-
+    // Update the signal with the new user data,when user click save
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
-        this.user = result; // Update the signal with the new user data
+        this.user = result;
       }
     });
   }

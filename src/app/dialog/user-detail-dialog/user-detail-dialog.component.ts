@@ -1,4 +1,4 @@
-import { Component, inject, Inject } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { User } from '../../models/user-model';
 import { MatInputModule } from '@angular/material/input';
@@ -11,10 +11,10 @@ import {
   Validators,
 } from '@angular/forms';
 import { UserApiService } from '../../user-api.service';
-import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCard } from '@angular/material/card';
 import { MatIcon } from '@angular/material/icon';
+
 @Component({
   selector: 'app-user-detail-dialog',
   standalone: true,
@@ -22,18 +22,34 @@ import { MatIcon } from '@angular/material/icon';
     FormsModule,
     MatFormFieldModule,
     MatInputModule,
-    ReactiveFormsModule,MatButtonModule,MatCard,MatIcon
+    ReactiveFormsModule,
+    MatButtonModule,
+    MatCard,
+    MatIcon,
   ],
   templateUrl: './user-detail-dialog.component.html',
   styleUrl: './user-detail-dialog.component.css',
 })
 export class UserDetailDialogComponent {
-  userForm: FormGroup;
+  public userForm: FormGroup;
   readonly dialogRef = inject(MatDialogRef<UserDetailDialogComponent>);
-  data = inject<User>(MAT_DIALOG_DATA);
+  private fb = inject(FormBuilder);
+  private userService = inject(UserApiService);
+  /**
+   * Data passed into the dialog, representing the user to be edited.
+   */
+  public data = inject<User>(MAT_DIALOG_DATA);
 
-  constructor(private fb: FormBuilder, private userService: UserApiService) {
-    this.userForm = this.fb.group({
+  constructor() {
+    this.userForm = this.createForm();
+  }
+
+  /**
+   * Creates the form group for the user details form.
+   * @returns {FormGroup} The form group instance.
+   */
+  private createForm(): FormGroup {
+    return this.fb.group({
       name: [this.data.name, Validators.required],
       email: [this.data.email, [Validators.required, Validators.email]],
       phone: [this.data.phone, Validators.required],
@@ -45,7 +61,11 @@ export class UserDetailDialogComponent {
       }),
     });
   }
-  onSubmit(): void {
+  /**
+   * Submits the form data and updates the user.
+   * If the form is valid, the user data is updated via the UserApiService and the dialog is closed.
+   */
+  public onSubmit(): void {
     if (this.userForm.valid) {
       const updatedUser: User = { ...this.data, ...this.userForm.value };
       this.userService.updateUser(updatedUser).subscribe({
@@ -59,7 +79,11 @@ export class UserDetailDialogComponent {
       });
     }
   }
-  onNoClick(): void {
+
+  /**
+   * Closes the dialog without saving any changes.
+   */
+  public onNoClick(): void {
     this.dialogRef.close();
   }
 }
